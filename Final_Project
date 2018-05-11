@@ -1,11 +1,14 @@
-# ConnectFour
-// Connect Four game with Joshua Bach, Christopher Ma, and Hayden Howard.
+/**
+    We have made a Connect 4 game!!
+    Authors: Hayden Howard / Chris Ma / Joshua Bach
+    Period: 5
+**/
 #include <iostream>
 #include <cstring>
 #include <windows.h>
 #include <ctime>
 using namespace std;
-    void matrix();
+    void matrix(char);
     void board();
     void p1Choice();
     void p2Choice();
@@ -19,13 +22,21 @@ char p1C = 0,
 int x[7] = {5,5,5,5,5,5,5};
 string winner = "0",
        coords [r][c];
+struct Players {
+    string winner;
+};
+Players people[2];
 int main()
 {
-    /// matrix();
+    char badInternet = 'n';
+    cout << "Do you have bad internet?\n";
+    cin >> badInternet;
+    matrix(badInternet);
     system("title Connect 4");
     system("mode 500");
     system("color 0a");
     char a[100];
+    char* aPtr = &a[100];
     /*Title Screen*/{
     text_animation("  ________     ________    ___       _    ___       _    _________     ________    _________\n");
     text_animation(" / _____  |   / _____  |  |   |_    | |  |   |_    | |  |  _______|   / _____  |  |___   ___|\n");
@@ -186,7 +197,7 @@ void whoWins(){ /*Figures out who wins*/
                 if(coords[y-1][x+1] == player && coords[y-2][x+2] == player && coords[y-3][x+3] == player){
                     if(player == "1"){
                         p1Win();
-                        winner = "1";
+                        people[0].winner = "1";
                     }
                 }
                 /// -Positive Slope Win
@@ -200,7 +211,7 @@ void whoWins(){ /*Figures out who wins*/
                 if(coords[y-1][x-1] == player && coords[y-2][x-2] == player && coords[y-3][x-3] == player){
                     if(player == "1"){
                         p1Win();
-                        winner = "1";
+                        people[0].winner = "1";
                     }
                 }
                 /// -Negative Slope Win
@@ -222,69 +233,43 @@ void whoWins(){ /*Figures out who wins*/
                 if(coords[y][x+1] == player && coords[y][x+2] == player && coords[y][x+3] == player){
                     if(player == "2"){
                         p2Win();
-                        winner = "2";
+                        people[1].winner = "2";
                     }
                 }
-                /// -Horizontal Win
-                /*if(coords[y][x-1] == player && coords[y][x-2] == player && coords[y][x-3] == player){
-                    if(player == "2"){
-                        cout << "\nplayer 1 wins";
-                        winner = "2";
-                    }
-                }*/
                 /// Vertical Win
                 if(coords[y-1][x] == player && coords[y-2][x] == player && coords[y-3][x] == player){
                     if(player == "2"){
                         p2Win();
-                        winner = "2";
+                        people[0].winner = "2";
                     }
                 }
-                /// -Vertical Win
-                /*if(coords[y+1][x] == player && coords[y+2][x] == player && coords[y+3][x] == player){
-                    if(player == "2"){
-                        cout << "\nplayer 2 wins";
-                        winner = "2";
-                    }
-                }*/
                 /// Positive Slope Win Win
                 if(coords[y-1][x+1] == player && coords[y-2][x+2] == player && coords[y-3][x+3] == player){
                     if(player == "2"){
                         p2Win();
-                        winner = "2";
+                        people[1].winner = "2";
                     }
                 }
-                /// -Positive Slope Win
-                /**if(coords[y+1][x-1] == player && coords[y+2][x-2] == player && coords[y+3][x-3] == player){
-                    if(player == "2"){
-                        cout << "\nplayer 2 wins";
-                        winner = "2";
-                    }
-                }*/
                 /// Negative Slope Win
                 if(coords[y-1][x-1] == player && coords[y-2][x-2] == player && coords[y-3][x-3] == player){
                     if(player == "2"){
                         p2Win();
-                        winner = "2";
+                        people[1].winner = "2";
                     }
                 }
-                /// -Negative Slope Win
-                /**if(coords[y+1][x-1] == player && coords[y-2][x-2] == player && coords[y-3][x-3] == player){
-                    if(player == "2"){
-                        cout << "\nplayer 2 wins";
-                        winner = "2";
-                    }
-                }*/
             }
         }
     }
 }
 
-void matrix(){ /*Loading screen*/
-    system("title Loading...");
-    system("color 0a");
-    for(int i = 0;i<=50;i++){
-        system("echo %random%%random%%random%%random%%random%%random%%random%%random%%random%%random%");
-        system("echo %random%%random%%random%%random%%random%%random%%random%%random%%random%%random%");
+void matrix(char badInternet){ /*Loading screen*/
+    if(badInternet == 'y'){
+        system("title Loading...");
+        system("color 0a");
+        for(int i = 0;i<=50;i++){
+            system("echo %random%%random%%random%%random%%random%%random%%random%%random%%random%%random%");
+            system("echo %random%%random%%random%%random%%random%%random%%random%%random%%random%%random%");
+        }
     }
 }
 
@@ -338,12 +323,12 @@ void p2Win(){ /* Shows the win screen for player 1*/
     exit(0);
 }
 
-void text_animation(char a[100]){
+void text_animation(char* aPtr){
     int i;
     double k;
-    for(i = 0;a[i]!='\0';++i){
-        for(k = 0;k<1000000;++k);{
-            cout << a[i];
+    for(i = 0; *(aPtr +i)!='\0'; ++i){
+        for(k = 0; k<20000; ++k);{
+            cout << *(aPtr +i);
         }
     }
 }
